@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcart-ingress
+  namespace: mcart-dev
+  annotations:
+    kubernetes.io/ingress.class: "gce"   # GKE Ingress (External HTTP(S) LB)
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /api/catalog
+            pathType: Prefix
+            backend:
+              service:
+                name: catalog-svc
+                port: { number: 80 }
+          - path: /api/search
+            pathType: Prefix
+            backend:
+              service:
+                name: search-svc
+                port: { number: 80 }
