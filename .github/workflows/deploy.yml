@@ -23,6 +23,7 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       # 2) Fetch kubeconfig for GKE
       - uses: google-github-actions/get-gke-credentials@v3
