@@ -20,6 +20,10 @@ spec:
               value: "https://31a8c5124ac34f5cb1796eb7065b67d9.us-central1.gcp.cloud.es.io:443"
             - name: ES_API_KEY
               valueFrom: { secretKeyRef: { name: search-secrets, key: ES_API_KEY } }
+            - name: GCP_PROJECT_ID
+              value: "nagp-demo-487019"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "k8s"
           ports:
             - containerPort: 8080
           readinessProbe:
