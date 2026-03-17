@@ -49,7 +49,7 @@ jobs:
             --from-literal=ES_API_KEY='${{ secrets.ES_API_KEY }}'
 
       # 5) Delete old workloads
-      - name: K8s apply (catalog/search)
+      - name: K8s delete (catalog/search)
         run: |
           kubectl -n $K8S_NS delete -f k8s/catalog.yaml
           kubectl -n $K8S_NS delete -f k8s/search.yaml
