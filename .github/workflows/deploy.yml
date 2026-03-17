@@ -48,16 +48,22 @@ jobs:
           kubectl -n $K8S_NS create secret generic search-secrets \
             --from-literal=ES_API_KEY='${{ secrets.ES_API_KEY }}'
 
-      # 5) Apply workloads
+      # 5) Delete old workloads
+      - name: K8s apply (catalog/search)
+        run: |
+          kubectl -n $K8S_NS delete -f k8s/catalog.yaml
+          kubectl -n $K8S_NS delete -f k8s/search.yaml
+
+      # 6) Apply workloads
       - name: K8s apply (catalog/search/ingress)
         run: |
           kubectl -n $K8S_NS apply -f k8s/catalog.yaml
           kubectl -n $K8S_NS apply -f k8s/search.yaml
           kubectl -n $K8S_NS apply -f k8s/ingress.yaml
 
-      # 6) Wait for rollouts and surface failures
+      # 7) Wait for rollouts and surface failures
       - name: Wait for rollouts
         run: |
           set -e
-          kubectl -n $K8S_NS rollout status deploy/catalog-api --timeout=120s
-          kubectl -n $K8S_NS rollout status deploy/search-api --timeout=120s
+          kubectl -n $K8S_NS rollout status deploy/catalog-api --timeout=300s
+          kubectl -n $K8S_NS rollout status deploy/search-api --timeout=300s
