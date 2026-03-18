@@ -48,18 +48,18 @@ jobs:
           kubectl -n $K8S_NS create secret generic search-secrets \
             --from-literal=ES_API_KEY='${{ secrets.ES_API_KEY }}'
 
-      # 5) Delete old workloads
-      - name: K8s delete (catalog/search)
-        run: |
-          kubectl -n $K8S_NS delete -f k8s/catalog.yaml
-          kubectl -n $K8S_NS delete -f k8s/search.yaml
-
-      # 6) Apply workloads
+      # 5) Apply workloads
       - name: K8s apply (catalog/search/ingress)
         run: |
           kubectl -n $K8S_NS apply -f k8s/catalog.yaml
           kubectl -n $K8S_NS apply -f k8s/search.yaml
           kubectl -n $K8S_NS apply -f k8s/ingress.yaml
+
+      # 6) Force rollout of latest images
+      - name: Rollout of latest images
+        run: |
+          kubectl -n $K8S_NS delete -f k8s/catalog.yaml
+          kubectl -n $K8S_NS delete -f k8s/search.yaml
 
       # 7) Wait for rollouts and surface failures
       - name: Wait for rollouts
