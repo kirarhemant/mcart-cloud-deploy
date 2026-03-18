@@ -58,8 +58,8 @@ jobs:
       # 6) Force rollout of latest images
       - name: Rollout of latest images
         run: |
-          kubectl -n $K8S_NS delete -f k8s/catalog.yaml
-          kubectl -n $K8S_NS delete -f k8s/search.yaml
+          kubectl -n $K8S_NS rollout restart deployment/catalog-api
+          kubectl -n $K8S_NS rollout restart deployment/search-api
 
       # 7) Wait for rollouts and surface failures
       - name: Wait for rollouts
