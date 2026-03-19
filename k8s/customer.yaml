@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-api
+  namespace: mcart-dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: customer-api }
+  template:
+    metadata:
+      labels: { app: customer-api }
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/kirarhemant/customer-api:main
+          imagePullPolicy: Always #changed from IfNotPresent
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://10.90.0.3:5432/mcart"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom: { secretKeyRef: { name: customer-secrets, key: DB_USER } }
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom: { secretKeyRef: { name: customer-secrets, key: DB_PASS } }
+            - name: GCP_PROJECT_ID
+              value: "nagp-demo-487019"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "k8s"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet: { path: /actuator/health, port: 8080 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "100m", memory: "256Mi" }
+            limits:   { cpu: "500m", memory: "512Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-svc
+  namespace: mcart-dev
+spec:
+  selector: { app: customer-api }
+  ports:
+    - port: 80
+      targetPort: 8080

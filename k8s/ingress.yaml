@@ -21,3 +21,9 @@ spec:
               service:
                 name: search-svc
                 port: { number: 80 }
+          - path: /api/customer
+            pathType: Prefix
+            backend:
+              service:
+                name: customer-svc
+                port: { number: 80 }
