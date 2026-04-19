@@ -17,7 +17,7 @@ spec:
           imagePullPolicy: Always #changed from IfNotPresent
           env:
             - name: ES_URL
-              value: "https://31a8c5124ac34f5cb1796eb7065b67d9.us-central1.gcp.cloud.es.io:443"
+              value: "https://c908f2497167445385e8b342d3ad51a7.asia-south1.gcp.elastic-cloud.com:443"
             - name: ES_API_KEY
               valueFrom: { secretKeyRef: { name: search-secrets, key: ES_API_KEY } }
             - name: GCP_PROJECT_ID
